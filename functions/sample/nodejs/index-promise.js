@@ -32,7 +32,8 @@ function getDbs(cloudant) {
  
  
  /*
- Sample implementation to get the records in a db based on a selector. If selector is empty, it returns all records. 
+ Sample implementation t
+ to get the records in a db based on a selector. If selector is empty, it returns all records. 
  eg: selector = {state:"Texas"} - Will return all records which has value 'Texas' in the column 'State'
  */
  function getMatchingRecords(cloudant,dbname, selector) {
