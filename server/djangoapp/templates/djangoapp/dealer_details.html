@@ -1,18 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
+{% extends "djangoapp/base.html" %}
 
-    <body>
+{% load static %}
 
-    <!--Add a nav bar here -->
+{% block title %}
+{{dealer_sn}} Reviews
+{% endblock %}
 
-    <!-- Add reviews as cards -->
+{% block content %}
+    <div class="mt-4 text-center">
+        <h2 class="display-4">{{dealer_sn}} Car Dealership</h2>
+        {% if user.is_authenticated %}
+        <div class="alert alert-secondary" role="alert">
+            <a href="{% url 'djangoapp:add_review' dealer_id dealer_sn %}">Leave a review</a> for {{dealer_sn}}.
+        </div>
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+            Please <a href="{% url 'djangoapp:login' %}" class="alert-link">sign in</a> to leave a review for this dealership.
+        </div>
+        {% endif %}
+    </div>
+    <hr>
 
-    </body>
-
-</html>
+    {% if reviews %}
+    <div class="card-columns mt-2">
+        {% for r in reviews %}
+        {% if r.sentiment == "positive" %}
+        <div class="card text-success border-success">
+        {% elif r.sentment == "negative" %}
+        <div class="card text-danger border-danger">
+        {% else %}
+        <div class="card">
+        {% endif %}
+            {% if r.sentiment == "positive" %}
+            <img class="card-img-left" height="90px" width="90px" src="{{MEDIA_URL}}/emoji/positive.png">
+            {% elif r.sentment == "negative" %}
+            <img class="card-img-left"  height="90px" width="90px" src="{{MEDIA_URL}}/emoji/negative.png">
+            {% else %}
+            <img class="card-img-left"  height="90px" width="90px" src="{{MEDIA_URL}}/emoji/neutral.png">
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title">{{r.car_make}} {{r.car_model}}</h4>
+                <h5 class="card-title">{{r.car_year}}</h5>
+                <p class="card-text">{{r.review}} - <i class="text-muted">{{r.name}}</i></p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div>
+        <div class="alert alert-info font-italic" role="alert">
+            There aren't any reviews available for this dealer yet.
+        </div>
+    </div>
+    {% endif %}
+{% endblock content %}

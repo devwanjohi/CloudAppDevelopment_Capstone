@@ -1,16 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Contact Details</h1>
-    <ul>
-        <li>Address: 893 - 20117 Naivasha</li>
-        <li>Tel No. +254200 177 301</li>
-    </ul>
-</body>
-</html>
+{% extends "djangoapp/base.html" %}
+
+{% load static %}
+
+{% block title%}
+Contact HELIX Cars Dealership
+{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+    <h2 class="display-4 text-center">Contact HELIX Cars Dealership</h2>
+    <p class="lead text-center">Reach us any time during working days for any inquiry.</p>
+
+    <div class="card text-center">
+        <div class="card-header">
+            Use any of the contacts below to contact us.
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Customer Service</h5>
+            <p class="card-text">Tel. 1-020-000-500</p>
+            <h5 class="card-title">Mailbox: info@helix.co.ke</h5>
+            <p class="card-text">Miscellaneous St.<br>#254 Texas City, NA 45700</p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

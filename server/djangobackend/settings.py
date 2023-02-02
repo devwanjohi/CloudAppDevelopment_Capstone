@@ -15,7 +15,22 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ENV SETUP
+#env = AppEnv()
+#NLU_SVC_OBJ = env.get_service(label='natural-language-understanding')
 
+vcap_svcs = {}
+if 'VCAP_SERVICES' in os.environ:
+    vcap_svcs = json.loads(os.environ.get('VCAP_SERVICES',''))
+else:
+    try:
+        f = open('vcap_services.json') # local file, which hopefully won't break the whole build flow...
+        vcap_svcs = json.load(f)
+        f.close()
+    except IOError:
+        print('Error handling file (not found).')
+
+NLU_SVC_OBJ =  vcap_svcs.get('natural-language-understanding', {})
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
