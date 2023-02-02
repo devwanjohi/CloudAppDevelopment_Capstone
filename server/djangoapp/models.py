@@ -2,13 +2,7 @@ from django.db import models
 from django.utils.timezone import now
 
 
-# Create your models here.
 
-# <HINT> Create a Car Make model `class CarMake(models.Model)`:
-# - Name
-# - Description
-# - Any other fields you would like to include in car make model
-# - __str__ method to print a car make object
 class CarMake(models.Model):
     name = models.CharField(max_length=20, null=False, default='Car Make')
     description = models.TextField(max_length=500, default="Description of the make of the car.")
@@ -16,34 +10,36 @@ class CarMake(models.Model):
     def __str__(self) -> str:
         return self.name + " - " + self.description
 
-# <HINT> Create a Car Model model `class CarModel(models.Model):`:
-# - Many-To-One relationship to Car Make model (One Car Make has many Car Models, using ForeignKey field)
-# - Name
-# - Dealer id, used to refer a dealer created in cloudant database
-# - Type (CharField with a choices argument to provide limited choices such as Sedan, SUV, WAGON, etc.)
-# - Year (DateField)
-# - Any other fields you would like to include in car model
-# - __str__ method to print a car make object
 class CarModel(models.Model):
-    make = models.ForeignKey(CarMake, on_delete=models.CASCADE, default=1)
-    name = models.CharField(null=False, max_length=20)
+    car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE, default=1)
+    name = models.CharField(null=False, max_length=25)
     dealer = models.IntegerField(null=False, default=0)
 
     CONVERT = 'convertible'
+    COUPE = 'coupe'
+    ELECTRIC = 'electric'
     HATCH = 'hatchback'
+    LIMO = 'limo'
+    MUSCLE = 'muscle'
     SEDAN = 'sedan'
     SPORTS = 'sports'
+    SUPER = 'super'
     SUV = 'suv'
     VANS = 'vans'
     WAGON = 'wagon'
     CAR_TYPE_CHOICES = [
         (CONVERT, 'Convertible'),
+        (COUPE, 'Coupe'),
+        (ELECTRIC, 'Electric Car'),
         (HATCH, 'Hatchback'),
+        (LIMO, 'Limousine'),
+        (MUSCLE, 'Muscle Car'),
         (SEDAN, 'Sedan'),
         (SPORTS, 'Sports Car'),
+        (SUPER, 'Super Car'),
         (SUV, 'SUV'),
         (VANS, 'Van'),
-        (WAGON, 'Wagon'),
+        (WAGON, 'Wagon')
     ]
     car_type = models.CharField( max_length = 15, choices = CAR_TYPE_CHOICES, default = SUV )
     car_year = models.DateField()
@@ -51,45 +47,34 @@ class CarModel(models.Model):
     def __str__(self) -> str:
         return self.name + ": " + self.car_type + " - " + str(self.car_year.year)
 
-# <HINT> Create a plain Python class `CarDealer` to hold dealer data
 class CarDealer:
 
-    def __init__(self, address, city, full_name, id, lat, long, short_name, st, zip):
-        # Dealer address
-        self.address = address
-        # Dealer city
-        self.city = city
-        # Dealer Full Name
-        self.full_name = full_name
-        # Dealer id
-        self.id = id
-        # Location lat
-        self.lat = lat
-        # Location long
-        self.long = long
-        # Dealer short name
-        self.short_name = short_name
-        # Dealer state
-        self.st = st
-        # Dealer zip
-        self.zip = zip
+    def __init__(self, kwargs):
+        self.address = kwargs.get("address",'No Addres')
+        self.city = kwargs.get("city", "Unknown")
+        self.full_name = kwargs.get("full_name", "Unknown")
+        self.id = kwargs.get("id", 0)
+        self.lat = kwargs.get('lat', None)
+        self.long = kwargs.get('long', None)
+        self.short_name = kwargs.get('short_name', 'Unknown')
+        self.st = kwargs.get('st', "NA")
+        self.zip = kwargs.get('zip', 00000)
 
     def __str__(self):
-        return "Dealer name: " + self.full_name
+        return self.full_name
 
-# <HINT> Create a plain Python class `DealerReview` to hold review data
 class DealerReview:
-    def __init__(self, dealership, name, purchase, id, review, purchase_date, car_make, car_model, car_year, sentiment):
-        self.dealership = dealership
-        self.name = name
-        self.purchase = purchase
-        self.id = id
-        self.review = review
-        self.purchase_date = purchase_date
-        self.car_make = car_make
-        self.car_model = car_model
-        self.car_year = car_year
-        self.sentiment = sentiment
+    def __init__(self, kwargs):
+        self.dealership = kwargs.get('dealership',1)
+        self.name = kwargs.get('name', 'Anonymous Reviewer')
+        self.purchase = kwargs.get('purchase', False)
+        self.review = kwargs.get('review', 'No review.')
+        self.purchase_date = kwargs.get('purchase_date', None)
+        self.car_make = kwargs.get('car_make', None)
+        self.car_model = kwargs.get('car_model', None)
+        self.car_year = kwargs.get('car_year', None)
+        self.id = kwargs.get('id', 123)
+        self.sentiment = kwargs.get('sentiment', 'neutral')
 
     def __str__(self):
-        return "Review: " + self.review
+        return self.review
