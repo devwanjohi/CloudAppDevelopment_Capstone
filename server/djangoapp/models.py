@@ -3,24 +3,19 @@ from django.db import models
 from django.db.models.fields.related import ManyToManyField
 from django.utils.timezone import now
 
-
-
 class CarMake(models.Model):
-    mkid = models.SmallIntegerField(primary_key=True, default=1) # gonna need this for FK relationship
+    mkid = models.SmallIntegerField(primary_key=True, default=1)
     name = models.CharField(max_length=25, null=False, default='Car Make')
     description = models.CharField(max_length=500, default="Description of car make or manufacturer.")
 
     def __str__(self) -> str:
         return self.name + " - " + self.description
 
-
 class CarModel(models.Model):
     mdid = models.SmallIntegerField(primary_key=True, default=1)
     car_make = models.ForeignKey(CarMake, on_delete=models.CASCADE, default=1)
     name = models.CharField(null=False, max_length=25)
-    dealership = models.IntegerField(null=False, default=0) # dealer id is "dealership" in the db.
-
-    # define choices for car type
+    dealership = models.IntegerField(null=False, default=0)
     SEDAN = 'sedan'
     SUV = 'suv'
     WAGON = 'wagon'
@@ -52,12 +47,10 @@ class CarModel(models.Model):
         choices = CAR_TYPE_CHOICES,
         default = COUPE
     )
-    car_year = models.DateField() #DateTime obj and not a string..
+    car_year = models.DateField()
 
     def __str__(self) -> str:
         return self.name + ": " + str(self.car_year.year) + " - " + self.car_type
-
-
 
 class CarDealer:
     """
@@ -82,9 +75,7 @@ class CarDealer:
 
 
     def __str__(self) -> str: 
-        #TIL -> str is a func annotation. gonna leave it since vscode keeps adding it.
         return "Dealer name: " + self.full_name
-
 
 class DealerReview:
     """
@@ -97,7 +88,6 @@ class DealerReview:
         """
         "kwargs" should just be a dictionary with all the data you need.
         """
-        #print('Constructing review object with the following:\n {}'.format(kwargs))
         self.dealership = kwargs.get('dealership',1)
         self.name = kwargs.get('name', 'Anonymous Reviewer')
         self.purchase = kwargs.get('purchase', False)
@@ -106,9 +96,8 @@ class DealerReview:
         self.car_make = kwargs.get('car_make', None)
         self.car_model = kwargs.get('car_model', None)
         self.car_year = kwargs.get('car_year', None)
-        self.id = kwargs.get('id', 123) # shouldn't be 0/none...
-        self.sentiment = kwargs.get('sentiment', 'neutral') # uses a separate feature from func call to generate
-        #print('Constructed review with id {}. Author name: {}'.format(self.id, self.name))
+        self.id = kwargs.get('id', 123)
+        self.sentiment = kwargs.get('sentiment', 'neutral')
 
     def __str__(self) -> str:
         return self.dealership + ": " + self.name + " - " + self.review

@@ -1,68 +1,64 @@
 <!DOCTYPE html>
 <html>
-    <!--
-        Base template for extending.
-        Includes: 
-            - shared meta.
-            - shared navbar
-        Extendable:
-            - title: custom title
-            - imports: include any extra links
-            - content: all the page details below the navbar
-            - scripts: any page-specfic scripts
-        
-        To use: Include - extends "djangoapp/base.html" - at the very top
-    -->
+
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Dealership Review{% endblock %}</title>
-
-        <!-- BOOTSTRAP BASICS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-        
-        <!-- EXTRA BITS TO LINK -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
         {% block imports %}
         {% endblock imports %}
     </head>
     <body>
-        <!-- NAVIGATION BAR (dark theme) -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm border-bottom">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand font-weight-bold" href="{% url 'djangoapp:index' %}">Dealership Review</a>
-                    <a class="nav-item px-2 text-white font-weight-bold" href="{% url 'djangoapp:about' %}">About</a>
-                    <a class="nav-item px-2 text-white font-weight-bold" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                    <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Helix Dealership</a>
+                    <a class="nav-item px-2" href="{% url 'djangoapp:index' %}">Home</a>
+                    <a class="nav-item px-2" href="{% url 'djangoapp:about' %}">About</a>
+                    <a class="nav-item px-2" href="{% url 'djangoapp:contact' %}">Contact Us</a>
                 </div>
-                <!-- Account Info/Access fields-->
+
+                
                 <ul class="nav navbar-nav navbar-right">
-                    {% if user.is_authenticated %} <!--Show name / logout link-->
+                    {% if user.is_authenticated %}
                     <li>
                         <a class="btn btn-link" href="#">{{user.first_name}} ({{user.username}})</a>
                         <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
                     </li>
-                    {% else %} <!--Show login form-->
+                    {% else %}
                     <li>
                         <form class="form-inline" action="{% url 'djangoapp:login' %}" method="POST">
                             {% csrf_token %}
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Username" name="usr">
                                 <input type="password" class="form-control" placeholder="Password" name="psw">
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-outline-primary">Login</button>
-                                </div>
+                                <button type="submit" class="btn btn-primary">Login</button>
+                                <a class="btn btn-link" href="{% url 'djangoapp:reg' %}">Sign Up</a>
                             </div>
-                            <a class="btn btn-link" href="{% url 'djangoapp:reg' %}">Sign Up</a>
                         </form>
                     </li>
                     {% endif %}
                 </ul>
+
             </div>
         </nav>
         <div class="container">
         {% block content %}
         {% endblock content %}
         </div>
+        <div class="container">
+            <footer class="py-3 my-4">
+              <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li class="nav-item"><a href="{% url 'djangoapp:index' %}" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="{% url 'djangoapp:contact' %}" class="nav-link px-2 text-muted">contacts</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+                <li class="nav-item"><a href="{% url 'djangoapp:about' %}" class="nav-link px-2 text-muted">About us</a></li>
+              </ul>
+              <p class="text-center text-muted">© 2023 HELIX Company ltd, Inc</p>
+            </footer>
+          </div>
     </body>
     {% block scripts %}
     {% endblock scripts %}

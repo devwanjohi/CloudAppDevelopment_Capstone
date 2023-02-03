@@ -6,12 +6,6 @@
 review {{ dealer_sn }}
 {% endblock %}
 
-{% block imports %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-{% endblock imports %}
-
 {% block content %}
     {% if status %}
     <div class="alert alert-danger">
@@ -24,31 +18,28 @@ review {{ dealer_sn }}
         {% if user.is_authenticated %}
         <form action="{% url 'djangoapp:add_review' dealer_id dealer_sn %}" method="POST">
             <div class="form-header text-center">
-                <p class="lead"><b>Posting review as:</b> {{user.first_name}} {{user.last_name}}</p>
+                <p class="lead">Add a review about {{ dealer_sn }}</p>
             </div>
             <div class="form-inputs">
                 <div class="form-group">
                     <label for="review">Review Content</label>
-                    <textarea class="form-control" placeholder="Share your thoughts on {{dealer_sn}}." name="review" id="review" rows="2" required></textarea>
+                    <textarea class="form-control" placeholder="Enter your reviw about {{dealer_sn}} here..." name="review" id="review" rows="2" required></textarea>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" name="purchase" id="purchase">
-                    <label for="purchase" class="form-check-label">Have you purchased this car from {{dealer_sn}} Car Dealership?</label>
-                </div>
-                <div class="alert alert-light text-center font-italic">
-                    Please complete the following if you have purchased a car from this dealer
+                    <label for="purchase" class="form-check-label">Has purchased the car from {{dealer_sn}} Car Dealership? <i>(select purchased car information below if checked)</i></label>
                 </div>
                 <div class="form-group row justify-content-center">
-                    <label for="purchase_date" class="col-sm-2 text-right">Purchase Date</label>
+                    <label for="car" class="col-sm-2 text-right"><b>Select your car (Make-Model-Year):</b></label>
+                    <select class="form-control col-sm-3" name="car" id="car">
+                        {% for car in cars %}
+                        <option value="{{car.mdid}}">{{car.name}}-{{car.car_make.name}}-{{car.car_year|date:"Y"}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="purchase_date" class="col-sm-2 text-right"><b>Select Purchase Date</b></label>
                     <div class="col-sm-3">
                         <input class="form-control" type="date" placeholder="" name="purchase_date" id="purchase_date">
                     </div>
-                    <label for="car" class="col-sm-2 text-right">Make - Model - Year</label>
-                    <select class="form-control col-sm-3" name="car" id="car">
-                        {% for car in cars %}
-                        <option value="{{car.mdid}}">{{car.name}} - {{car.car_make.name}} - {{car.car_year|date:"Y"}}</option>
-                        {% endfor %}
-                    </select>
                 </div>
                 <div>
                     {% csrf_token %}

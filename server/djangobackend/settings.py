@@ -24,7 +24,7 @@ if 'VCAP_SERVICES' in os.environ:
     vcap_svcs = json.loads(os.environ.get('VCAP_SERVICES',''))
 else:
     try:
-        f = open('vcap_services.json') # local file, which hopefully won't break the whole build flow...
+        f = open('vcap_services.json')
         vcap_svcs = json.load(f)
         f.close()
     except IOError:
