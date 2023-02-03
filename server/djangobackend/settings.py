@@ -15,9 +15,9 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ENV SETUP
-#env = AppEnv()
-#NLU_SVC_OBJ = env.get_service(label='natural-language-understanding')
+
+# env = AppEnv()
+# NLU_SVC_OBJ = env.get_service(label='natural-language-understanding')
 
 vcap_svcs = {}
 if 'VCAP_SERVICES' in os.environ:

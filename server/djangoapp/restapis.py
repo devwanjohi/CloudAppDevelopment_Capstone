@@ -73,32 +73,6 @@ def get_dealers_from_cf(url):
     return results
 
 
-def get_dealer_by_state_from_cf(url, **kwargs):
-    """
-    This function calls get_request() w/ the specified args (state) then:
-        1. Parses the json data returned from the request / "get-state-dealers" Cloud function
-        2. Puts it into a proxy CarDealer obj
-        3. Creates and returns a list of those proxies.
-    """
-    results = []
-    if 'state' in kwargs:
-        json_result = get_request(url, state=kwargs.get('state'))
-    else:
-        print('State (Abbrev.) not supplied in kwargs.')
-        results.append('Could not execute request: missing state abbreviation')
-    if 'entries' in json_result:
-        dealers = json_result.get('entries','Could not pull entries.')
-
-        for dealer in dealers:
-            dealer_obj = CarDealer(dealer)
-            print(dealer_obj.full_name)
-            results.append(dealer_obj)
-    else:
-        print('No entries received for State {}'.format(kwargs.get('state','N/A')))
-        results = 'Could not retrieve Dealer data for the given state.'
-    return results
-
-
 def get_dealer_reviews_from_cf(url, **kwargs):
     """
     This function calls get_request() w/ the specified args (dealerId) then:
@@ -134,21 +108,6 @@ def get_dealer_reviews_from_cf(url, **kwargs):
         results = 'Could not retrieve review data: ' + json.get('error')
     return results
 
-
-# #
-# Watson NLU Service
-# #
-
-
-# nlu_creds = NLU_SVC_OBJ[0].get('credentials')
-# authenticator = IAMAuthenticator(nlu_creds.get('apikey'))
-# service_url = nlu_creds.get('url')
-
-# nlu_instance = NaturalLanguageUnderstandingV1(
-#     version="2021-03-25",
-#     authenticator=authenticator
-# )
-# nlu_instance.set_service_url(service_url)
 
 def analyze_review_sentiments(text):
     """

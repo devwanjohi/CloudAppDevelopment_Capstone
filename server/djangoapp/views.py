@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import CarModel
-from .restapis import get_dealer_by_state_from_cf, get_dealer_reviews_from_cf, get_dealers_from_cf, post_request
+from .restapis import get_dealer_reviews_from_cf, get_dealers_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.views.generic.base import TemplateView
@@ -88,16 +88,6 @@ def get_dealerships(request):
         context['dealers'] = dealerships
         context['states'] = sorted(just_states)
         return render(request, 'djangoapp/index.html', context)
-
-
-def get_state_dealers(request, state):
-    context = {}
-    if request.method == "GET":
-        url = STATE_DEALERS_API_URL
-        dealerships = get_dealer_by_state_from_cf(url, state=state)
-
-        context['dealers'] = dealerships
-        return render(request, 'djangoapp/state.html', context)
 
 
 def get_dealer_details(request, dealer_id, dealer_sn):
